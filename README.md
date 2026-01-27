@@ -1,35 +1,40 @@
-# COIL: A Biomimetic Haptic Interface
+# SPIRAL: A Biomimetic Haptic Altar 🌀
 
-**Project Status:** Active Development / Prototyping
-**Focus:** Soft Robotics, Haptics, Computer Vision, Human-Robot Interaction (HRI)
+**Project Status:** Active Prototyping (Collaboration: B21 McGill, Artch Festival)  
+**Focus:** Human-Robot Interaction (HRI), Soft Robotics, Diasporic Memory
 
-## Project Overview
-COIL is a kinetic art installation that functions as a "living" altar. It explores the intersection of diasporic memory and affective computing. The system utilizes computer vision to detect physical offerings, triggering a synchronized response of haptic feedback (vibration) and respiratory motion (soft robotics expansion/contraction).
+## The Vision
+SPIRAL is a kinetic art installation that functions as a "living" entity. It explores diaspora not as a static category, but as a sensory condition—a layering of sounds, rhythms, and "missing pieces" carried in the body. 
 
-## System Architecture
+In my practice as a "baby researcher" and "baby artist," I treat academic theory as a material to be softened and shared. SPIRAL uses computer vision to "inhale" physical offerings, triggering a synchronized response of haptic feedback (heartbeat) and respiratory motion (breathing) to communicate with the year 3333.
 
-### 1. Perception (The Eye)
-* **Hardware:** USB Webcam (Top-down view)
+## Technical Architecture
+
+### 👁️ Perception (The Eye)
+* **Hardware:** USB Webcam 
 * **Software:** Python + OpenCV
-* **Logic:** Object detection triggers the state change from "Idle" to "Active."
+* **Logic:** Computer vision identifies the placement of an artifact, transitioning the system from "Idle" to "Active Ritual" mode.
 
-### 2. Logic (The Brain)
-* **Generative AI:** Google Gemini API analyzes the visual input to generate a speculative narrative ("The 3333 Transmission").
-* **Controller:** Python script acts as the central hub, sending serial data to the microcontroller.
+### 🧠 Logic (The Brain)
+* **Generative AI:** Google Gemini API (Visual-to-Text)
+* **Translation:** A custom Python hub translates "3333 transmissions" into speculative narratives and serial commands for the hardware.
 
-### 3. Actuation (The Body)
+### 🫀 Actuation (The Body)
 * **Microcontroller:** Arduino Uno / ESP32
-* **Haptics:** Vibration motors providing a "heartbeat" feedback loop.
-* **Kinetics:** Servo-driven mechanism simulating biological breathing (expansion/contraction).
-* **Output:** Thermal Printer (ESC/POS protocol) providing a physical artifact.
+* **Haptics:** An array of vibration motors creating a rhythmic "pulse" for non-visual interaction.
+* **Kinetics:** A servo-actuated "lung" mechanism for biomorphic expansion and contraction.
+* **Output:** Thermal printer (ESC/POS) delivering tangible, thermal-printed transmissions.
 
-## Roadmap for Robotica Residency
-* [ ] Design and 3D print the internal brackets for the servo mechanism.
-* [ ] Solder and test the vibration motor array.
-* [ ] Write the Python-to-Arduino serial communication script.
-* [ ] Integrate the thermal printer with the "Oracle" AI script.
+## Engineering Goals for Robotica
+As a researcher moving into hardware, my goals at Robotica are to:
+1. **Refine Biomorphic Motion:** Engineer a durable, silent servo-cam system for the breathing mechanism.
+2. **Haptic Accessibility:** Develop a "tactile map" on the sculpture's surface to guide visually impaired users through the ritual.
+3. **Hardware Integration:** Move from a breadboard prototype to a custom-soldered internal "nervous system."
 
 ## Tech Stack
-* **Languages:** Python, C++ (Arduino)
+* **Code:** Python, C++ (Arduino)
 * **Libraries:** `opencv-python`, `google-generativeai`, `pyserial`
-* **Hardware:** Arduino, Prusa/Bambu 3D Printers, Vibration Motors
+* **Fabrication:** 3D Printing (FDM), Mixed Media Sculpture
+
+---
+*“Just as we learn from our ancestors, they also learn from us.”*
