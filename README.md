@@ -1,9 +1,3 @@
-import cv2
-import serial
-import time
-import os
-import google.generativeai as genai
-
 # --- SPIRAL: A Ritual for Diasporic Grief and Radical Hope ---
 
 # Setup Gemini AI
