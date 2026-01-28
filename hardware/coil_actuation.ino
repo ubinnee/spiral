@@ -1,82 +1,68 @@
 #include <Servo.h>
 
-/* * COIL Altar - Hardware Control Script
- * Developed for Robotica Residency Application
- * This script manages the "Living" state of the altar via:
- * 1. A Servo motor for respiratory (breathing) motion.
- * 2. A Vibration motor for tactile (heartbeat) pulses.
+/* SPIRAL: A Ritual for Diasporic Grief and Radical Hope
+ * Hardware Control: Pulse (Vibration) & Breath (Servo)
  */
 
-// --- PIN DEFINITIONS ---
-const int vibrationPin = 3;  // Digital output for vibration motor
-const int servoPin = 9;      // PWM output for servo
+// Pins
+const int vibrationPin = 3;  
+const int servoPin = 9;      
 Servo lungServo;             
 
-// --- STATE VARIABLES ---
-char incomingByte;           // Stores command from Python ('B' = Begin, 'I' = Idle)
-int restingPos = 90;         // Neutral position of the servo
-int maxExpansion = 160;      // Fully "inhaled" position
+// Variables
+char command;                
+int restingPos = 90;         
+int maxExpansion = 160;      
 
 void setup() {
-  Serial.begin(9600);        // Initialize USB serial communication
+  Serial.begin(9600);        
   lungServo.attach(servoPin); 
   pinMode(vibrationPin, OUTPUT);
   
-  // Initialization: Return to resting state
+  // Initial state: Resting
   lungServo.write(restingPos);
   digitalWrite(vibrationPin, LOW);
-  
-  Serial.println("Altar Hardware Ready.");
 }
 
 void loop() {
-  // Check if Python sent a command
   if (Serial.available() > 0) {
-    incomingByte = Serial.read();
+    command = Serial.read();
 
-    if (incomingByte == 'B') {
-      // Initiate the "Breathing" and "Pulsing" loop
+    if (command == 'B') {
+      // Begin the Ritual: Breathe and Pulse
       runActiveRitual();
     } 
-    else if (incomingByte == 'I') {
-      // Return to low-power idle state
+    else if (command == 'I') {
+      // Idle: Stop vibration and return to resting position
       digitalWrite(vibrationPin, LOW);
       lungServo.write(restingPos);
     }
   }
 }
 
-// --- MOTION LOGIC ---
-
 void runActiveRitual() {
-  // Executes 3 complete "Breath" cycles
+  // Execute 3 deep breathing cycles
   for (int cycle = 0; cycle < 3; cycle++) {
     
-    // INHALE (Expansion)
+    // Inhale (Expand)
     for (int pos = restingPos; pos <= maxExpansion; pos += 1) {
       lungServo.write(pos);
-      
-      // Trigger a heartbeat pulse at the peak of the inhale
-      if (pos == 130) {
-        triggerHeartbeat();
-      }
-      delay(40); // Controls inhale speed
+      if (pos == 125) heartbeat(); // Pulse at mid-inhale
+      delay(40); 
     }
 
-    // EXHALE (Contraction)
+    // Exhale (Contract)
     for (int pos = maxExpansion; pos >= restingPos; pos -= 1) {
       lungServo.write(pos);
-      delay(50); // Controls exhale speed (slightly slower for natural feel)
+      delay(50); 
     }
     
-    delay(400); // Pause between breaths
+    delay(500); 
   }
 }
 
-// --- HAPTIC LOGIC ---
-
-void triggerHeartbeat() {
-  // A double-pulse vibration ("Thump-Thump")
+void heartbeat() {
+  // Double-thump haptic feedback
   digitalWrite(vibrationPin, HIGH);
   delay(80);
   digitalWrite(vibrationPin, LOW);
