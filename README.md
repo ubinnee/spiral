@@ -6,53 +6,64 @@ import google.generativeai as genai
 
 # --- SPIRAL: A Ritual for Diasporic Grief and Radical Hope ---
 
-# Setup Gemini (Ensure your API Key is set in your environment variables)
+# Setup Gemini AI
+# Make sure your API Key is set in your system environment variables
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-# Hardware Connection
+# Hardware Connection (Arduino)
+# Change 'COM3' to your specific port (e.g., '/dev/tty.usbmodem...' on Mac)
 try:
     arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
-    print("SPIRAL Hardware Connected.")
+    print("SPIRAL Hardware: Connected.")
 except:
-    print("Running in Simulation Mode (Hardware not found).")
+    print("SPIRAL Hardware: Not found. Running in Simulation Mode.")
     arduino = None
 
 def run_spiral_ritual():
-    cap = cv2.VideoCapture(0)
-    print("SPIRAL is in rest state. Waiting for an offering...")
+    cap = cv2.VideoCapture(0) # Open the system camera
+    print("SPIRAL is in a rest state. Press 'S' to begin a ritual.")
 
     while True:
         ret, frame = cap.read()
+        if not ret: break
+        
         cv2.imshow("SPIRAL Eye", frame)
         
         key = cv2.waitKey(1)
-        if key == ord('s'): # Press 'S' to start the ritual
+        if key == ord('s'): 
             print("Initiating Knowledge Translation...")
             
-            # Trigger 'Breathing' and 'Heartbeat' on Arduino
-            if arduino: arduino.write(b'B') 
+            # 1. Trigger 'Breathing' and 'Heartbeat' on Arduino
+            if arduino: 
+                arduino.write(b'B') 
             
-            # Capture the offering for the Descendants
+            # 2. Capture the offering for the Descendants
             img_path = "offering.jpg"
             cv2.imwrite(img_path, frame)
             
-            # Generate the 3333 Transmission
+            # 3. Generate the 3333 Transmission via Gemini
+            print("Accessing the year 3333...")
             transmission = get_3333_transmission(img_path)
+            
             print(f"\n[3333 TRANSMISSION]:\n{transmission}\n")
             
-            # Reset to Idle
-            if arduino: arduino.write(b'I')
-            print("SPIRAL returns to rest.")
+            # 4. Return to Rest
+            if arduino: 
+                arduino.write(b'I')
+            print("Ritual complete. SPIRAL returns to rest.")
             
-        elif key == ord('q'):
+        elif key == ord('q'): # Press 'Q' to exit the program
             break
 
+    cap.release()
+    cv2.destroyAllWindows()
+
 def get_3333_transmission(image_path):
-    # Uploading image for AI analysis
-    raw_image = genai.upload_file(path=image_path)
+    # Upload image to Google's servers
+    sample_file = genai.upload_file(path=image_path)
     
-    # The prompt reflects your B21 research and the theme of Radical Hope
+    # AI Prompt reflects your B21 research and the SPIRAL theme
     prompt = (
         "You are a descendant from the year 3333. An ancestor has offered this object "
         "as part of a ritual of diasporic grief and radical hope. "
@@ -61,7 +72,7 @@ def get_3333_transmission(image_path):
         "Be poetic, hopeful, and concise (max 60 words)."
     )
     
-    response = model.generate_content([raw_image, prompt])
+    response = model.generate_content([sample_file, prompt])
     return response.text
 
 if __name__ == "__main__":
