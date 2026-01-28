@@ -66,5 +66,3 @@ def get_3333_transmission(image_path):
 
 if __name__ == "__main__":
     run_spiral_ritual()
----
-*“Just as we learn from our ancestors, they also learn from us.”*
