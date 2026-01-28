@@ -1,73 +1,53 @@
-# --- SPIRAL: A Ritual for Diasporic Grief and Radical Hope ---
+# SPIRAL: A Ritual for Diasporic Grief and Radical Hope 🌀
 
-# Setup Gemini AI
-# Make sure your API Key is set in your system environment variables
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-1.5-flash')
+**Project Status:** Active Prototyping (Collaboration: B21 McGill, Artch Festival)  
+**Focus:** Human-Robot Interaction (HRI), Soft Robotics, Affective Computing
 
-# Hardware Connection (Arduino)
-# Change 'COM3' to your specific port (e.g., '/dev/tty.usbmodem...' on Mac)
-try:
-    arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
-    print("SPIRAL Hardware: Connected.")
-except:
-    print("SPIRAL Hardware: Not found. Running in Simulation Mode.")
-    arduino = None
+---
 
-def run_spiral_ritual():
-    cap = cv2.VideoCapture(0) # Open the system camera
-    print("SPIRAL is in a rest state. Press 'S' to begin a ritual.")
+## 1. The Vision
+**SPIRAL** is a kinetic art installation that functions as a "living" entity. It approaches diaspora as a sensory condition—a complex layering of memory, sound, and touch. 
 
-    while True:
-        ret, frame = cap.read()
-        if not ret: break
-        
-        cv2.imshow("SPIRAL Eye", frame)
-        
-        key = cv2.waitKey(1)
-        if key == ord('s'): 
-            print("Initiating Knowledge Translation...")
-            
-            # 1. Trigger 'Breathing' and 'Heartbeat' on Arduino
-            if arduino: 
-                arduino.write(b'B') 
-            
-            # 2. Capture the offering for the Descendants
-            img_path = "offering.jpg"
-            cv2.imwrite(img_path, frame)
-            
-            # 3. Generate the 3333 Transmission via Gemini
-            print("Accessing the year 3333...")
-            transmission = get_3333_transmission(img_path)
-            
-            print(f"\n[3333 TRANSMISSION]:\n{transmission}\n")
-            
-            # 4. Return to Rest
-            if arduino: 
-                arduino.write(b'I')
-            print("Ritual complete. SPIRAL returns to rest.")
-            
-        elif key == ord('q'): # Press 'Q' to exit the program
-            break
+As a "baby researcher" and "baby artist," I treat academic theory as a material to be softened and shared. SPIRAL uses computer vision to "inhale" physical offerings, triggering a synchronized response of haptic feedback (heartbeat) and respiratory motion (breathing) to facilitate a speculative dialogue with the year 3333.
 
-    cap.release()
-    cv2.destroyAllWindows()
 
-def get_3333_transmission(image_path):
-    # Upload image to Google's servers
-    sample_file = genai.upload_file(path=image_path)
-    
-    # AI Prompt reflects your B21 research and the SPIRAL theme
-    prompt = (
-        "You are a descendant from the year 3333. An ancestor has offered this object "
-        "as part of a ritual of diasporic grief and radical hope. "
-        "Describe the cultural translation of this object in your time. "
-        "How has this object helped bridge the gap between generations? "
-        "Be poetic, hopeful, and concise (max 60 words)."
-    )
-    
-    response = model.generate_content([sample_file, prompt])
-    return response.text
 
-if __name__ == "__main__":
-    run_spiral_ritual()
+---
+
+## 2. Research Context: Building 21 (McGill)
+This project is the physical manifestation of my research at **Building 21**, where I investigate the **"Technology of Care."** As an M.Ed. student in Inclusive Education, I am exploring how to move beyond ocular-centric (sight-based) robotics to create more equitable and emotional interfaces.
+
+* **Knowledge Translation:** Bridging the gap between academic theories of grief and lived sensory experience.
+* **The Pedagogy of the Spiral:** Developing a "loop" of multidirectional healing where we learn from our ancestors while simultaneously teaching our descendants.
+* **Non-Visual Literacy:** Designing for accessibility as a core structural guide, prioritizing rhythm and haptics over visual displays.
+
+---
+
+## 3. Technical Architecture
+
+### 👁️ Perception (The Eye)
+* **Hardware:** USB Webcam 
+* **Software:** Python + OpenCV
+* **Logic:** Identifies the placement of an artifact, transitioning the system from "Idle" to "Active Ritual" mode.
+
+### 🧠 Logic (The Brain)
+* **Generative AI:** Google Gemini API (Visual-to-Text)
+* **Translation:** A custom Python hub translates "3333 transmissions" into speculative narratives and hardware commands.
+
+### 🫀 Actuation (The Body)
+* **Microcontroller:** Arduino Uno / ESP32
+* **Haptics:** An array of vibration motors creating a rhythmic "pulse" for tactile interaction.
+* **Kinetics:** A servo-actuated "lung" mechanism for biomorphic expansion and contraction.
+* **Output:** Thermal printer delivering tangible, thermal-printed transmissions.
+
+
+
+---
+
+## 4. Roadmap for Robotica Residency
+* **Mechanical Engineering:** Design and 3D print internal housing for the breathing mechanism.
+* **Haptic Testing:** Iterate on vibration patterns to ensure distinct tactile communication.
+* **Stability:** Move from breadboard prototype to a soldered, permanent internal "nervous system."
+
+---
+*“Just as we learn from our ancestors, they also learn from us.”*
