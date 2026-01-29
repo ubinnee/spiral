@@ -1,3 +1,5 @@
 opencv-python
 pyserial
 google-generativeai
+mido
+python-rtmidi
