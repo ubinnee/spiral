@@ -1,81 +1,111 @@
 #include <Servo.h>
 
-// --- HARDWARE PIN SETUP ---
-const int vibrationPin = 3;  // Connect your vibration motor module to Digital Pin 3
-const int servoPin = 9;      // Connect your Servo signal wire to Digital Pin 9
-Servo lungServo;             // Create a servo object to control the 'breathing'
+/* 🌀 SPIRAL: A Ritual for Diasporic Grief and Radical Hope
+ * Hardware Control: The Body (Actuation, Haptics, and Thermal)
+ * Commands: 
+ * 'H' - Embrace: Heat on + Constant Purr
+ * 'W' - Wake-up: Sharp double-pulse to signal Mic is active
+ * 'B' - Ritual: Biomorphic breathing cycles with heartbeat thumps
+ * 'I' - Idle: All systems off / Resting position
+ */
 
-// --- VARIABLES ---
-char command;                // Stores the instruction sent from your Python script
-int servoPos = 90;           // Starting position (neutral)
+// --- PIN DEFINITIONS ---
+const int vibrationPin = 3;  // Haptic Feedback
+const int servoPin = 9;      // Breathing Mechanism
+const int heaterPin = 5;     // Thermal Element
+Servo lungServo;             
+
+// --- STATE VARIABLES ---
+char command;                
+int restingPos = 90;         // Neutral state
+int maxExpansion = 160;      // Full inhale
 
 void setup() {
-  Serial.begin(9600);        // Open serial communication at 9600 baud
+  Serial.begin(9600);        
   lungServo.attach(servoPin); 
   pinMode(vibrationPin, OUTPUT);
+  pinMode(heaterPin, OUTPUT);
   
-  // Set the altar to a "resting" position on startup
-  lungServo.write(90);
+  // Initial state: Silent and Cold
+  lungServo.write(restingPos);
   digitalWrite(vibrationPin, LOW);
-  
-  Serial.println("COIL Altar Hardware Initialized.");
+  digitalWrite(heaterPin, LOW);
 }
 
 void loop() {
-  // Check if Python has sent a command over the USB cable
   if (Serial.available() > 0) {
     command = Serial.read();
 
-    if (command == 'B') {
-      // 'B' for Begin Ritual: Start the living cycle
-      runLivingCycle();
+    if (command == 'H') {
+      // THE EMBRACE: Start heating and low-level purring
+      digitalWrite(heaterPin, HIGH);
+      digitalWrite(vibrationPin, HIGH); // Constant hum
     } 
+    
+    else if (command == 'W') {
+      // THE WAKE-UP: Sharp signal that AI is now listening
+      wakeUpSignal();
+      // Keep vibration on after signal to indicate "Listening" state
+      digitalWrite(vibrationPin, HIGH); 
+    }
+
+    else if (command == 'B') {
+      // THE RITUAL: Movement and breathing
+      digitalWrite(heaterPin, LOW); // Cool down during movement
+      runActiveRitual();
+    } 
+
     else if (command == 'I') {
-      // 'I' for Idle: Return to a quiet, resting state
-      goToRest();
+      // IDLE: Reset all
+      digitalWrite(vibrationPin, LOW);
+      digitalWrite(heaterPin, LOW);
+      lungServo.write(restingPos);
     }
   }
 }
 
-// --- RITUAL BEHAVIOR ---
-void runLivingCycle() {
-  // This simulates 3 deep, rhythmic breaths
-  for (int breath = 0; breath < 3; breath++) {
-    
-    // 1. INHALE: The servo moves slowly to expand the structure
-    for (int pos = 90; pos <= 160; pos += 1) {
-      lungServo.write(pos);
-      
-      // Add a heartbeat pulse halfway through the inhale
-      if (pos == 125) {
-        heartbeat();
-      }
-      delay(35); // Controls the "speed" of the breath
-    }
+// --- HAPTIC SIGNATURES ---
 
-    // 2. EXHALE: The servo moves back to contract the structure
-    for (int pos = 160; pos >= 90; pos -= 1) {
-      lungServo.write(pos);
-      delay(45); // Exhaling is usually slightly slower/longer
-    }
-    
-    delay(500); // Brief pause between breaths
+void wakeUpSignal() {
+  // A crisp, mechanical double-tap
+  for(int i = 0; i < 2; i++) {
+    digitalWrite(vibrationPin, HIGH);
+    delay(150);
+    digitalWrite(vibrationPin, LOW);
+    delay(100);
   }
 }
 
-// --- SENSORY FUNCTIONS ---
-void heartbeat() {
-  // A quick "thump-thump" vibration pattern
+void heartbeatThump() {
+  // The biomorphic "Lub-Dub"
   digitalWrite(vibrationPin, HIGH);
   delay(80);
   digitalWrite(vibrationPin, LOW);
-  delay(100);
+  delay(120);
   digitalWrite(vibrationPin, HIGH);
   delay(80);
   digitalWrite(vibrationPin, LOW);
 }
 
-void goToRest() {
-  digitalWrite(vibrationPin, LOW);
-  lungServo.write(90); // Return to neutral "flat" position
+// --- KINETIC LOGIC ---
+
+void runActiveRitual() {
+  // Executes 3 complete breathing cycles
+  for (int cycle = 0; cycle < 3; cycle++) {
+    
+    // INHALE
+    for (int pos = restingPos; pos <= maxExpansion; pos += 1) {
+      lungServo.write(pos);
+      if (pos == 130) heartbeatThump(); // Pulse at the peak
+      delay(40); 
+    }
+
+    // EXHALE
+    for (int pos = maxExpansion; pos >= restingPos; pos -= 1) {
+      lungServo.write(pos);
+      delay(50); 
+    }
+    
+    delay(600); // Pause for breath
+  }
 }
