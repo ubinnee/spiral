@@ -3,3 +3,5 @@ pyserial
 google-generativeai
 mido
 python-rtmidi
+SpeechRecognition
+PyAudio
